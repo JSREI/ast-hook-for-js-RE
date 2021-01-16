@@ -198,23 +198,4 @@ function exists(path) {
     }
 }
 
-function ensureDirectoryExists(directory) {
-    // 如果指定的目录不存在的话则创建
-    if (exists(directory)) {
-        return;
-    }
-    shell.mkdir("-p", directory);
-    console.log(`mkdir ${directory}`);
-}
-
-
-function exists(path) {
-    try {
-        fs.statSync(path);
-        return true;
-    } catch (e) {
-        return e.message.indexOf("no such file or directory") === -1;
-    }
-}
-
 module.exports.process = process;
