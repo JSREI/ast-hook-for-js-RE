@@ -7,11 +7,11 @@
         let newJsCode = jsCode;
         const xhr = new XMLHttpRequest();
         xhr.addEventListener("load", () => {
-            jsCode = xhr.responseText;
+            newJsCode = decodeURIComponent(xhr.responseText);
         });
         // 必须同步执行，否则无法返回结果
         xhr.open("POST", "http://127.0.0.1:10010/hook-js-code", false);
-        xhr.send(encodeURIComponent(atob(jsCode)));
+        xhr.send(encodeURIComponent(jsCode));
         arguments[0] = newJsCode;
         return evalHolder.apply(this, arguments);
     }

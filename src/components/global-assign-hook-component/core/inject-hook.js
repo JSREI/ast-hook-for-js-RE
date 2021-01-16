@@ -70,13 +70,13 @@ function injectHook(jsCode) {
                     continue;
                 }
 
+                if (!propertyValue) {
+                    return;
+                }
+
                 let objectKey = objectProperty.key;
                 if (types.isIdentifier(objectKey)) {
                     objectKey = types.stringLiteral(objectKey.name);
-                }
-
-                if (!propertyValue) {
-                    return;
                 }
 
                 const hookFunctionArguments = [

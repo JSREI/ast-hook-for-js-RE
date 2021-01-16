@@ -15,17 +15,17 @@ app.use(bodyParser.raw({
 }));
 // 将传过来的js代码注入hook
 app.post("/hook-js-code", function (request, response) {
-    const jsCode = request.body.toString();
+    const jsCode = decodeURIComponent(request.body.toString());
     let newJsCode = jsCode;
     try {
-        newJsCode = injectHook(Buffer.from(decodeURIComponent(jsCode), "base64").toString());
+        newJsCode = injectHook(jsCode);
     } catch (e) {
         console.error(e);
     }
     response.setHeader("Content-Type", "text/plain; charset=utf-8");
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "*");
-    response.send(newJsCode);
+    response.send(encodeURIComponent(newJsCode));
     response.end();
 })
 
