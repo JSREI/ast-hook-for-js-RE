@@ -117,3 +117,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+./src/proxy-server/js-file-cache
+

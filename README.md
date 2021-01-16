@@ -31,9 +31,23 @@
 
 ## 四、安装
 克隆本项目到本地：
+
 ```bash
-blabla
+git clone https://github.com/CC11001100/ast-hook-for-js-RE.git
 ```
+
+或者WebStorm的：
+
+![](images/README_images/cbc0ccc2.png)
+
+![](images/README_images/90554843.png)
+
+下载到本地之后安装依赖：
+```bash
+npm install 
+```
+如果是WebStorm点下右下角的提醒就可以了。
+
 需要启动两个本地Server，anyproxy的代理Server监听在本地10086端口，运行这个文件即可： 
 ```text
 src/proxy-server/proxy-server.js
