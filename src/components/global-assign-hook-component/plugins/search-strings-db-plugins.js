@@ -2,9 +2,10 @@
 
     // 检索字符串数据库
 
-    const stringsDB = window.cc11001100_hook.stringsDB;
+    const cc11001100_hook = window.cc11001100_hook;
+    const stringsDB = cc11001100_hook.stringsDB;
 
-    window.cc11001100_hook.search = function (pattern, isEquals = true) {
+    window.search = cc11001100_hook.search = function (pattern, isEquals = true) {
         const result = [];
         for (let s of stringsDB.varValueDb) {
             if (isEquals ? s.value === pattern : s.value.indexOf(pattern) !== -1) {
@@ -20,8 +21,29 @@
                 });
             }
         }
+        showResult(result);
+    }
 
+    window.searchByName = cc11001100_hook.searchByName = function (pattern, isEquals=false) {
+        const result = [];
+        for (let s of stringsDB.varValueDb) {
+            if (isEquals ? s.name === pattern : s.name.indexOf(pattern) !== -1) {
+                const codeInfo = parseCodeLocation(s.codeLocation)
+                result.push({
+                    name: s.name,
+                    value: abbreviationPattern(pattern, s.value),
+                    type: s.type,
+                    execOrder: s.execOrder,
+                    codeName: codeInfo.codeName,
+                    codeAddress: codeInfo.codeAddress,
+                    execTimes: stringsDB.codeLocationExecuteTimesCount[s.codeLocation]
+                });
+            }
+        }
+        showResult(result);
+    }
 
+    function showResult(result) {
         if (!result.length) {
             console.log("没有搜索到结果。");
             return;

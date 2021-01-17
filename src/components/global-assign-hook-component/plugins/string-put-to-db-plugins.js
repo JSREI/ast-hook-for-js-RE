@@ -13,7 +13,8 @@
 
     function stringPutToDB(name, value, type) {
 
-        if (typeof value !== "string" || !value) {
+        // 不止是string
+        if (!value) {
             return;
         }
 
@@ -21,7 +22,8 @@
         const codeLocation = getCodeLocation();
         varValueDb.push({
             name,
-            value,
+            // 默认情况下把所有变量都toString保存到字符串池子中
+            value: value + "",
             type,
             execOrder: execOrderCounter++,
             codeLocation
