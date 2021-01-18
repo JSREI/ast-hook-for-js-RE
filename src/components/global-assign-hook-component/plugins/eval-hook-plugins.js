@@ -1,9 +1,17 @@
 (() => {
 
+    // 是否要在在控制台上打印eval hook日志提醒
+    const enableEvalHookLog = true;
+
     // 用eval执行的代码也要能够注入，我擦开个接口吧...
     const evalHolder = window.eval;
     window.eval = function (jsCode) {
-        console.log("检测到eval执行代码： " + jsCode);
+
+        if (enableEvalHookLog) {
+            const isNeedNewLine = jsCode && jsCode.length > 100;
+            console.log("AST HOOK工具检测到eval执行代码： " + (isNeedNewLine ? "\n" : "") + jsCode);
+        }
+
         let newJsCode = jsCode;
         const xhr = new XMLHttpRequest();
         xhr.addEventListener("load", () => {
