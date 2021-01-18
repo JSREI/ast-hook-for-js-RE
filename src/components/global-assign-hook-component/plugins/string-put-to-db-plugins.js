@@ -22,6 +22,7 @@
         const codeLocation = getCodeLocation();
         varValueDb.push({
             name,
+            // TODO Buffer类结构直接运算Hook不到的问题仍然没有解决...
             // 默认情况下把所有变量都toString保存到字符串池子中
             // 有一些参数就是放在Buffer或者什么地方以字节形式存储，当使用到的时候直接与字符串相加toString，
             // 这种情况如果只监控变量赋值就监控不到了，这是不想添加更多监控点的情况下的折中方案...
