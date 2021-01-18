@@ -38,7 +38,7 @@
 ### **注：手机端访问GitHub图片可能加载不出来，如有此情况，请使用PC端访问就好啦。**
 ### **再注：如果PC端也看不到图，应该是访问被阻断，可科学上网，或者把项目下载到本地用Markdown工具打开本文件查看**
 
-### 强烈注：这里是至尊宝大佬录制的教视频教程，建议观看此视频教程安装：[https://www.bilibili.com/video/BV1so4y1o7qr/](https://www.bilibili.com/video/BV1so4y1o7qr/)
+### 强烈注：这里是至尊宝大佬录制的视频教程，建议观看此视频教程安装：[https://www.bilibili.com/video/BV1so4y1o7qr/](https://www.bilibili.com/video/BV1so4y1o7qr/)
 
 ### node版本要求 
 注：笔者在编码时使用到了较高版本的语法，因此请更新的您的node版本至少到14.0.0+，建议更新到最新的LTS版本。
