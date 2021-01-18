@@ -14,7 +14,7 @@
     function stringPutToDB(name, value, type) {
 
         // 不止是string
-        if (!value) {
+        if (!value || typeof  value !== "string") {
             return;
         }
 
