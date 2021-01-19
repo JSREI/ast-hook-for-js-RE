@@ -61,7 +61,64 @@ git clone https://github.com/CC11001100/ast-hook-for-js-RE.git
 npm install 
 ```
 如果是WebStorm点下右下角的提醒就可以了。
-志远ADME_images/a0806b65.png)
+
+### 启动项目 
+需要启动两个本地Server，anyproxy的代理Server监听在本地10086端口，运行这个文件即可： 
+```text
+src/proxy-server/proxy-server.js
+```
+要用anyproxy抓取https请求需要信任它的证书，在运行这个文件之前，先用`anyproxy ca`选项启动，访问它的web管理界面：
+```text
+http://localhost:8002/
+```
+然后下载证书信任即可： 
+
+![](images/README_images/fa6bcf49.png)
+
+这些都属于anyproxy的安装，如果出了问题请自行谷歌如何解决，
+我总不能老在自己的项目教如何安装人家的项目吧...
+
+api-server监听在本地10010端口，运行这个文件即可：
+```text
+src/api-server/api-server.js
+```
+
+然后在浏览器中将代理设置为10086端口即可，这里推荐使用便携版Chrome搭建单独的调试环境，并搭配`Proxy SwitchyOmega`或类似的插件作为代理路由辅助：
+
+[https://chrome.google.com/webstore/detail/padekgcemlokbadohgkifijomclgjgif](https://chrome.google.com/webstore/detail/padekgcemlokbadohgkifijomclgjgif)
+
+具体方案无所谓，只要能实现走代理就可以了。
+
+### 杂项 
+因为用AST实时处理JS文件太慢了，所以设置了个缓存，缓存目录默认为：
+```text
+src/proxy-server/js-file-cache
+```
+建议将此目录加入excluded节省IDE资源，如果你使用的是WebStorm的话：
+
+![](images/README_images/a8d93fe2.png)
+
+其它IDE请自行搜索如何设置。
+
+OK，至此已经安装完毕。 
+
+## 五、使用
+目前只有一个功能，就是使用加密后的字符串去定位变量所在的代码位置，
+下面会结合几个例子演示如何使用。 
+
+注：下面的例子都是随意找的，有的可能用参数名搜索或者油猴轻量级hook追调用栈甚至xhr追调用栈更方便，
+这个项目本身就是一个通杀工具，并不是针对某个站点的，
+这里只是演示一下这个项目能够做什么，请勿抬杠噢！
+
+
+### 案例一：猿人学第一题
+这里只是作为一个演示，把anyproxy和api-server启动，浏览器挂上代理，打开这个页面：
+
+[http://match.yuanrenxue.com/match/1](http://match.yuanrenxue.com/match/1)
+
+打开开发者工具，然后切换到network，然后单击页面上的第二页：
+
+![](images/README_images/a0806b65.png)
 
 发现是有一个加密的参数叫m的，然后复制这个m的值，记得完整复制：
 
