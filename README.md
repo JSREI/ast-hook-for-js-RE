@@ -67,7 +67,7 @@ npm install
 ```text
 src/proxy-server/proxy-server.js
 ```
-要用anyproxy抓取https请求需要信任它的证书，访问它的web管理界面：
+要用anyproxy抓取https请求需要信任它的证书，在运行这个文件之前，先用`anyproxy ca`选项启动，访问它的web管理界面：
 ```text
 http://localhost:8002/
 ```

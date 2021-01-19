@@ -14,6 +14,7 @@
     "@babel/types": "^7.12.12",
     "anyproxy": "^4.1.3",
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.5",
     "express": "^4.17.1",
     "jssoup": "0.0.12",
     "shelljs": "^0.8.4"

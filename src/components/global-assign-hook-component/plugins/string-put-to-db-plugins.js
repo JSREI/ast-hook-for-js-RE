@@ -1,11 +1,14 @@
 (() => {
 
+    const initDbMessage = "AST HOOK： 如果本窗口内有多个线程，每个线程栈的数据不会共享，初始化线程栈数据库： \n "
+        + window.location.href;
+    console.log(initDbMessage);
+
     // 用于存储Hook到的所有字符串类型的变量
-    const stringsDB = window.cc11001100_hook.stringsDB = {
+    const stringsDB = window.cc11001100_hook.stringsDB = window.cc11001100_hook.stringsDB || {
         varValueDb: [],
         codeLocationExecuteTimesCount: []
-    }
-
+    };
     const {varValueDb, codeLocationExecuteTimesCount} = stringsDB;
 
     // 从一个比较大的数开始计数，以方便在展示的时候与执行次数做区分，差值过大就不易混淆
@@ -13,8 +16,19 @@
 
     function stringPutToDB(name, value, type) {
 
-        // 不止是string
-        if (!value || typeof  value !== "string") {
+        if (!value) {
+            return;
+        }
+
+        // TODO 更多类型搞进来
+        let valueString = "";
+        if (typeof value === "string") {
+            valueString = value;
+        } else if (typeof value === "number") {
+            valueString = value + "";
+        }
+
+        if (!valueString) {
             return;
         }
 
@@ -27,7 +41,7 @@
             // 有一些参数就是放在Buffer或者什么地方以字节形式存储，当使用到的时候直接与字符串相加toString，
             // 这种情况如果只监控变量赋值就监控不到了，这是不想添加更多监控点的情况下的折中方案...
             // 所以干脆在它还是个buffer的时候就转为字符串
-            value: value + "",
+            value: valueString,
             type,
             execOrder: execOrderCounter++,
             codeLocation

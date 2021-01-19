@@ -1,7 +1,7 @@
 const fs = require("fs");
 const shell = require("shelljs");
 const crypto = require("crypto");
-const JSSoup = require("jssoup").default;
+const cheerio = require("cheerio");
 
 const {loadPluginsAsStringWithCache} = require("./plugins-manager");
 const {injectHook} = require("./inject-hook");
@@ -75,6 +75,7 @@ function isHtmlResponse(responseDetail) {
 // HTML中可能会夹带script标签，里面的JS代码也要能Hook到
 function processHtmlResponse(requestDetail, responseDetail) {
     // 使用了这个库来解析HTML  https://github.com/chishui/JSSoup
+    // 上面那个库有bug，替换为这个库： https://github.com/cheeriojs/cheerio/
 
     // 对所有的内嵌JavaScript内容注入Hook
     const url = requestDetail.url;
@@ -84,35 +85,45 @@ function processHtmlResponse(requestDetail, responseDetail) {
         return;
     }
 
-    const soup = new JSSoup(body);
-    const scriptArray = soup.findAll("script");
+    const $ = cheerio.load(body);
+    const scriptArray = $("script");
     if (!scriptArray?.length) {
         return;
     }
     let alreadyInjectHookContext = false;
     for (let script of scriptArray) {
+
         // 对于是src引用的外部，其标签内容都会被忽略
-        if (script.attrs.src) {
+        if (script.attribs.src) {
             continue;
         }
-        const jsCode = script.contents.join("\n");
-        if (!script.contents.length || !jsCode) {
+
+        // 空script
+        if (!script.children.length) {
             continue;
         }
-        // 要保留住原来的属性
-        let oldAttrs = "";
-        for(let key in script.attrs) {
-            oldAttrs += ` "${key.replace("\"", "\\\"")}"="${script.attrs[key].replace("\"", "\\\"")}" `
+
+        // script的内容
+        let jsCode = "";
+        for(let child of script.children) {
+            jsCode += child.data;
         }
+        if (!jsCode) {
+            return;
+        }
+
         let newJsCode = injectHook(jsCode);
         // 随着script替换时注入，不创建新的script标签
         if (!alreadyInjectHookContext) {
             newJsCode = loadPluginsAsStringWithCache() + newJsCode;
             alreadyInjectHookContext = true;
         }
-        script.replaceWith("<script "+ oldAttrs +">" + newJsCode + "</script>")
+
+        const newScript = cheerio.load("<script>" + newJsCode + "</script>")("script");
+        newScript.attribs = script.attribs;
+        $(script).replaceWith(newScript);
     }
-    responseDetail.response.body = soup.prettify();
+    responseDetail.response.body = $.html();
 }
 
 /**

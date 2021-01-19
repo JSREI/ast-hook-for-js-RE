@@ -25,12 +25,15 @@ function loadPluginsAsStringWithCache() {
 function loadPluginsAsString() {
 
     // 用来保证Hook代码只被加载一次
+    // TODO 妥善处理Worker环境
     const loadOnce = "\n" +
-        // 在Worker环境下会出现window未定义
-        "if (!window || window.cc11001100_hook_done) {\n" +
-        "    return;\n" +
-        "}\n" +
-        "window.cc11001100_hook_done = true;\n\n";
+        "   if (!window) {\n" +
+        "       return; \n" +
+        "   } \n" +
+        "   if (window.cc11001100_hook_done) {\n" +
+        "       return;\n" +
+        "   }\n" +
+        "   window.cc11001100_hook_done = true;\n\n";
 
     const hookJsCode = fs.readFileSync("../components/global-assign-hook-component/core/hook.js").toString();
 
@@ -42,7 +45,7 @@ function loadPluginsAsString() {
         pluginsJsContentArray.push(pluginJsContent);
     }
 
-    return "// ----------------------------------------- Hook代码开始 ----------------------------------------------------- \n" +
+    return "\n// ----------------------------------------- Hook代码开始 ----------------------------------------------------- \n" +
         "\n(() => {\n" +
 
         loadOnce +
