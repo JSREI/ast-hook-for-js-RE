@@ -22,10 +22,12 @@
 
         // TODO 更多类型搞进来
         let valueString = "";
-        if (typeof value === "string") {
+        let valueTypeof = typeof value;
+        if (valueTypeof === "string") {
             valueString = value;
-        } else if (typeof value === "number") {
-            valueString = value + "";
+        } else if (valueTypeof === "number") {
+            // 太慢了...
+            // valueString = value + "";
         }
 
         if (!valueString) {
