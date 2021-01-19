@@ -21,6 +21,7 @@
         }
 
         // TODO 更多类型搞进来
+        // TODO 为什么一定要大而全呢？虽然占用的内存并不多，但是如果上百万的零碎变量还是会耗时间的？也许应该针对性的做出取舍
         let valueString = "";
         let valueTypeof = typeof value;
         if (valueTypeof === "string") {
