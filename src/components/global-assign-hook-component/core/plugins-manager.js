@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 // 管理插件加载，打包注入到页面中
 
@@ -24,6 +25,8 @@ function loadPluginsAsStringWithCache() {
 // 把所有插件加载为 String
 function loadPluginsAsString() {
 
+    const __dirname = path.resolve();
+
     // 用来保证Hook代码只被加载一次
     // TODO 妥善处理Worker环境
     const loadOnce = "\n" +
@@ -35,10 +38,10 @@ function loadPluginsAsString() {
         "   }\n" +
         "   window.cc11001100_hook_done = true;\n\n";
 
-    const hookJsCode = fs.readFileSync("../components/global-assign-hook-component/core/hook.js").toString();
+    const hookJsCode = fs.readFileSync(path.join(__dirname, 'src/components/global-assign-hook-component/core/hook.js')).toString();
 
     const pluginsJsContentArray = [];
-    const pluginsBaseDirectory = "../components/global-assign-hook-component/plugins/";
+    const pluginsBaseDirectory = path.join(__dirname, 'src/components/global-assign-hook-component/plugins/');
     for (let pluginName of pluginsNames) {
         const pluginFilePath = pluginsBaseDirectory + "/" + pluginName;
         const pluginJsContent = fs.readFileSync(pluginFilePath).toString();
