@@ -7,7 +7,10 @@ const app = express();
 app.use(bodyParser.raw({
     verify: function (req, res, buf, encoding) {
         if (buf && buf.length) {
-            req.rawBody = buf.toString("UTF-8");
+            const contentType = req.headers["content-type"];
+            const charset = /charset=([\w-]+)/.exec(contentType)[1];
+            console.log(charset);
+            req.rawBody = buf.toString(charset);
         }
     }, type: function () {
         return true
@@ -22,7 +25,10 @@ app.post("/hook-js-code", function (request, response) {
     } catch (e) {
         console.error(e);
     }
-    response.setHeader("Content-Type", "text/plain; charset=utf-8");
+    const charset = /charset=([\w-]+)/.exec(request.headers["content-type"])[1];
+    console.log(charset);
+    response.setHeader("Content-Type", `text/plain; charset=${charset}`);
+    //response.setHeader("Content-Type", "text/plain; charset=utf-8");
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "*");
     response.send(encodeURIComponent(newJsCode));
