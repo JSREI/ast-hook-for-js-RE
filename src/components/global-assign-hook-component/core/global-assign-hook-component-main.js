@@ -64,7 +64,9 @@ function isHtmlResponse(responseDetail) {
     for (let key in responseDetail.response.header) {
         if (key.toLowerCase() === "content-type" && responseDetail.response.header[key].toLowerCase().toLowerCase().indexOf("text/html") !== -1) {
             if (!responseDetail.response.header[key].toLowerCase().endsWith("charset=utf-8")) {
-                responseDetail.response.header[key] = responseDetail.response.header[key] + ";charset=UTF-8";
+                if (!responseDetail.response.header[key].toLowerCase().includes("charset")) {
+                    responseDetail.response.header[key] = responseDetail.response.header[key] + ";charset=UTF-8";
+                }
             }
             return true;
         }
@@ -84,9 +86,9 @@ function processHtmlResponse(requestDetail, responseDetail) {
     if (!body.length) {
         return;
     }
-
-    const $ = cheerio.load(body);
-    const scriptArray = $("script");
+    //修复编码问题
+    const $ = cheerio.load(body,{decodeEntities: false});
+    const scriptArray = $("script",{encodeEntities: false});
     if (!scriptArray?.length) {
         return;
     }
@@ -136,7 +138,9 @@ function isJavaScriptResponse(responseDetail) {
     for (let key in responseDetail.response.header) {
         if (key.toLowerCase() === "content-type" && responseDetail.response.header[key].toLowerCase().toLowerCase().indexOf("javascript") !== -1) {
             if (!responseDetail.response.header[key].toLowerCase().endsWith("charset=utf-8")) {
-                responseDetail.response.header[key] = responseDetail.response.header[key] + ";charset=UTF-8";
+                if (!responseDetail.response.header[key].toLowerCase().includes("charset")) {
+                    responseDetail.response.header[key] = responseDetail.response.header[key] + ";charset=UTF-8";
+                }
             }
             return true;
         }
